@@ -5,15 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.TextView;
-
-import com.example.myapplication.R;
 
 import java.util.ArrayList;
 
 public class BoxAdapter extends BaseAdapter {
     private forQuestions activity;
-    private ArrayList<Question> objects;
+    private ArrayList<Question> objects = new ArrayList<>();
 
     BoxAdapter(forQuestions forQuestions) {
         activity = forQuestions;
@@ -35,7 +32,7 @@ public class BoxAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         View view = convertView;
         if (view == null) {
@@ -43,17 +40,29 @@ public class BoxAdapter extends BaseAdapter {
         }
         Question it = getQuestion(position);
 
-        ((TextView) view.findViewById(R.id.nameOtQuestion)).setText(it.title);
-
+        ((Button) view.findViewById(R.id.nameOtQuestion)).setText(it.title);
+        view.findViewById(R.id.nameOtQuestion).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Question question = Quest.getInstance().curQuestion;
+                if (question == null)
+                    return;
+                question.answers.get(question.a_id).nextQuest = position;
+                Quest.getInstance().curQuestion = null;
+            }
+        });
         int ids[] = {R.id.VarF, R.id.VarS, R.id.VarT, R.id.VarFo};
-        for (int i = 0; i < it.answers.size(); i++) {
+        for (int id : ids) {
+            Button btn = (Button) view.findViewById(id);
+            btn.setVisibility(View.GONE);
+        }
+        int i = 0;
+        for (Answer a : it.answers) {
             Button btn = (Button) view.findViewById(ids[i]);
-            if (it.answers.get(i) != null) {
-                btn.setVisibility(View.VISIBLE);
-                btn.setText(it.answers.get(i).title);
-                btn.setOnClickListener(it);
-            } else
-                btn.setVisibility(View.GONE);
+            btn.setVisibility(View.VISIBLE);
+            btn.setText(a.title);
+            btn.setOnClickListener(it);
+            i++;
         }
 
         return view;

@@ -12,8 +12,6 @@ public class Question implements View.OnClickListener {
     int a_id = -1;
 
     ArrayList<Answer> answers;
-
-
     String image;
 
     Question() {
@@ -36,12 +34,10 @@ public class Question implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
         Quest.getInstance().curQuestion = this;
         String ans = ((Button) v).getText().toString();
         int i = 0;
         for (Answer a : answers) {
-
             if (a.title.equals(ans)) {
                 a_id = i;
                 break;
