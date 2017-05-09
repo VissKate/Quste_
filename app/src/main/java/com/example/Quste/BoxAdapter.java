@@ -46,7 +46,7 @@ public class BoxAdapter extends BaseAdapter {
         ((TextView) view.findViewById(R.id.nameOtQuestion)).setText(it.title);
 
         int ids[] = {R.id.VarF, R.id.VarS, R.id.VarT, R.id.VarFo};
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < it.answers.size(); i++) {
             Button btn = (Button) view.findViewById(ids[i]);
             if (it.answers.get(i) != null) {
                 btn.setVisibility(View.VISIBLE);
