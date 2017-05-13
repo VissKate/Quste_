@@ -13,46 +13,30 @@ import java.util.ArrayList;
 
 public class ActivityForGame extends AppCompatActivity {
     TextView qst;
-    Button var1;
-    Button var2;
-    Button var3;
-    Button var4;
     Question next;
     Boolean n;
     Boolean b = true;
     int num;
     Question firstQuestion;
-
     int ids[] = {R.id.var1, R.id.var2, R.id.var3, R.id.var4};
-
     ArrayList<Question> arrrayQuste = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        String csvFile = "C:\\Users\\Надя.Катя\\Desktop\\Quste\\test.csv";
-
+        loadQuest();
 
         qst = (TextView) findViewById(R.id.qstn);
-        var1 = (Button) findViewById(R.id.var1);
-        var2 = (Button) findViewById(R.id.var2);
-        var3 = (Button) findViewById(R.id.var3);
-        var4 = (Button) findViewById(R.id.var4);
         LinearLayout gamelinear = (LinearLayout) findViewById(R.id.gamelinear);
+        Question firstQuestion = Quest.getInstance().questions.get(0);
 
-
-        for (Question firstQuestion : arrrayQuste) {//как вытащить первый вопрос и на этом остановиться?
             while (b) {
                 n = false;
                 qst.setText(firstQuestion.title);
                 for (int id : ids) {
-
-                    Button btn = (Button) view.findViewById(id);
+                    Button btn = (Button) findViewById(id);
                     btn.setVisibility(View.GONE);
-
                 }
                 gamelinear.setBackgroundDrawable(Drawable.createFromPath(firstQuestion.image));
                 if (n) {
@@ -60,8 +44,6 @@ public class ActivityForGame extends AppCompatActivity {
                     firstQuestion = next;
                 }
             }
-            break;
-        }
 
 
     }
@@ -79,6 +61,25 @@ public class ActivityForGame extends AppCompatActivity {
             }
             num = num + 1;
 
+        }
+
+    }
+
+    private void loadQuest() {
+        Quest.getInstance().questions = new ArrayList<>();
+        ArrayList<ArrayList<String>> structure = Utils.getStructure("new.csv");
+        for (ArrayList<String> row : structure) {
+            Question q = new Question();
+            q.title = row.get(0);
+            q.image = row.get(1);
+            int n = Integer.parseInt(row.get(2));
+            for (int i = 0; i < n; i++) {
+                Answer a = new Answer();
+                a.title = row.get(3 + i * 2);
+                a.nextQuest = Integer.parseInt(row.get(3 + i * 2 + 1));
+                q.answers.add(a);
+            }
+            Quest.getInstance().questions.add(q);
         }
 
     }
