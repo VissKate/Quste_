@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gamelinear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -15,7 +16,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/Qstn"
+                android:id="@+id/qstn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/alert_dark_frame"
@@ -23,38 +24,40 @@
                 android:textColor="@color/colorPrimaryDark" />
 
             <Button
-                android:id="@+id/Var1"
+                android:id="@+id/var1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryDark"
+                android:onClick="Var"
                 android:textColor="@color/colorAccent" />
 
             <Button
-                android:id="@+id/Var2"
+                android:id="@+id/var2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryDark"
-                android:onClick="Var2"
-
-                android:textColor="@color/colorAccent" />
-
-            <Button
-                android:id="@+id/Var3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark"
-                android:onClick="Var3"
+                android:onClick="Var"
 
                 android:textColor="@color/colorAccent" />
 
             <Button
-                android:id="@+id/Var4"
+                android:id="@+id/var3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryDark"
-                android:onClick="Var4"
+                android:onClick="Var"
 
                 android:textColor="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/var4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:onClick="Var"
+
+                android:textColor="@color/colorAccent" />
+
         </LinearLayout>
     </ScrollView>
 
