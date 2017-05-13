@@ -14,7 +14,12 @@ import java.util.Collections;
 
 public class Utils {
 
-    public static void putStructure(String filename, ArrayList<ArrayList<String>> structure) {
+    public static void saveQuestions(String filename, ArrayList<Question> questions) {
+        ArrayList<ArrayList<String>> structure = new ArrayList<>();
+        for (Question question : questions) {
+            ArrayList<String> row = question.makeRow();
+            structure.add(row);
+        }
         File down_folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         String csvFile = down_folder.getAbsolutePath() + "/" + filename;
         BufferedWriter bw = null;
@@ -41,8 +46,9 @@ public class Utils {
         }
     }
 
-    public static ArrayList<ArrayList<String>> getStructure(String filename) {
-        ArrayList<ArrayList<String>> ret = new ArrayList<>();
+    public static ArrayList<Question> loadQuestions(String filename) {
+        ArrayList<Question> ret = new ArrayList<>();
+        ArrayList<ArrayList<String>> structure = new ArrayList<>();
         File down_folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         String csvFile = down_folder.getPath() + "/" + filename;
         BufferedReader br = null;
@@ -52,7 +58,7 @@ public class Utils {
             while ((line = br.readLine()) != null) {
                 ArrayList<String> tmp = new ArrayList<>();
                 Collections.addAll(tmp, line.split(";"));
-                ret.add(tmp);
+                structure.add(tmp);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,6 +70,19 @@ public class Utils {
                     e.printStackTrace();
                 }
             }
+        }
+        for (ArrayList<String> row : structure) {
+            Question q = new Question();
+            q.title = row.get(0);
+            q.image = row.get(1);
+            int n = Integer.parseInt(row.get(2));
+            for (int i = 0; i < n; i++) {
+                Answer a = new Answer();
+                a.title = row.get(3 + i * 2);
+                a.nextQuest = Integer.parseInt(row.get(3 + i * 2 + 1));
+                q.answers.add(a);
+            }
+            ret.add(q);
         }
         return ret;
 

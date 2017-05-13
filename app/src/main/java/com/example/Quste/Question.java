@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 public class Question implements View.OnClickListener {
     String title;
-    int anssiz;
     int a_id = -1;
 
     ArrayList<Answer> answers;
@@ -23,8 +22,7 @@ public class Question implements View.OnClickListener {
         row.add(title);
         row.add(image);
 
-
-        row.add(anssiz + "");
+        row.add(answers.size() + "");
         for (Answer a : answers) {
             row.add(a.title);
             row.add(a.nextQuest + "");

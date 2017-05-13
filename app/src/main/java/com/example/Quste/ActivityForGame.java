@@ -9,81 +9,72 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 
-public class ActivityForGame extends AppCompatActivity {
+public class ActivityForGame extends AppCompatActivity implements View.OnClickListener {
     TextView qst;
-    Question next;
-    Boolean n;
-    Boolean b = true;
-    int num;
-    Question firstQuestion;
-    int ids[] = {R.id.var1, R.id.var2, R.id.var3, R.id.var4};
-    ArrayList<Question> arrrayQuste = new ArrayList<>();
+    LinearLayout gamelinear;
+
+    Button ansb[] = new Button[4];
+    Quest quest;
+
+    int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        loadQuest();
+        quest = Quest.getInstance();
+        quest.questions = Utils.loadQuestions("new.csv");
 
         qst = (TextView) findViewById(R.id.qstn);
-        LinearLayout gamelinear = (LinearLayout) findViewById(R.id.gamelinear);
-        Question firstQuestion = Quest.getInstance().questions.get(0);
+        gamelinear = (LinearLayout) findViewById(R.id.gamelinear);
+        quest.curQuestion = quest.questions.get(0);
 
-            while (b) {
-                n = false;
-                qst.setText(firstQuestion.title);
-                for (int id : ids) {
-                    Button btn = (Button) findViewById(id);
-                    btn.setVisibility(View.GONE);
-                }
-                gamelinear.setBackgroundDrawable(Drawable.createFromPath(firstQuestion.image));
-                if (n) {
-                    next = arrrayQuste.get(firstQuestion.answers.get(num).nextQuest);
-                    firstQuestion = next;
-                }
-            }
-
-
+        int ansbids[] = {R.id.var1, R.id.var2, R.id.var3, R.id.var4};
+        for (int id : ansbids) {
+            ansb[i] = (Button) findViewById(id);
+            ansb[i].setOnClickListener(this);
+            ansb[i++].setVisibility(View.GONE);
+        }
+        setQuestion();
     }
 
+    private void setQuestion() {
+        qst.setText(quest.curQuestion.title);
+        gamelinear.setBackgroundDrawable(Drawable.createFromPath(quest.curQuestion.image));
+        i = 0;
+        for (Button btn : ansb) {
+            if (i < quest.curQuestion.answers.size()) {
+                btn.setVisibility(View.VISIBLE);
+                btn.setText(quest.curQuestion.answers.get(i++).title);
+            } else
+                btn.setVisibility(View.GONE);
+        }
+    }
 
-    public void Var(View h) {
-
-        for (int i = 0; i < 4; i++) {
-            String stringanswer = ((Button) h).getText().toString();
-
-            if (stringanswer.equals(firstQuestion.answers.get(i).title)) {
-                n = true;
+    @Override
+    public void onClick(View v) {
+        int ans;
+        switch (v.getId()) {
+            case R.id.var1:
+                ans = 0;
                 break;
-
-            }
-            num = num + 1;
-
+            case R.id.var2:
+                ans = 1;
+                break;
+            case R.id.var3:
+                ans = 2;
+                break;
+            case R.id.var4:
+                ans = 3;
+                break;
+            default:
+                return;
         }
-
+        int nextQuestionId = quest.curQuestion.answers.get(ans).nextQuest;
+        if (nextQuestionId == -1)
+            return;
+        quest.curQuestion = quest.questions.get(nextQuestionId);
+        setQuestion();
     }
-
-    private void loadQuest() {
-        Quest.getInstance().questions = new ArrayList<>();
-        ArrayList<ArrayList<String>> structure = Utils.getStructure("new.csv");
-        for (ArrayList<String> row : structure) {
-            Question q = new Question();
-            q.title = row.get(0);
-            q.image = row.get(1);
-            int n = Integer.parseInt(row.get(2));
-            for (int i = 0; i < n; i++) {
-                Answer a = new Answer();
-                a.title = row.get(3 + i * 2);
-                a.nextQuest = Integer.parseInt(row.get(3 + i * 2 + 1));
-                q.answers.add(a);
-            }
-            Quest.getInstance().questions.add(q);
-        }
-
-    }
-
-
 }
-

@@ -123,8 +123,7 @@ public class MainActivity extends Activity {
         answer.nextQuest = -1;
         question.answers.add(answer);
         answer = new Answer();
-
-        question.anssiz = ++kolvobtn;
+        ++kolvobtn;
 
         if (kolvobtn == 4)
             v.setVisibility(View.GONE);
